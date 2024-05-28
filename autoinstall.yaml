@@ -10,6 +10,8 @@ autoinstall:
     allow-pw: true
   user-data:
     disable_root: false
+    late-commands:
+      - 'chroot /target su - nextocean -c "xdg-user-dirs-update"'
     chpasswd:
       expire: false
     users:
