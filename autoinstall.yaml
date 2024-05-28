@@ -3,11 +3,20 @@ autoinstall:
   version: 1
   identity:
     hostname: ubuntu-server
-    password: "$6$oSqeZUJFYZG4xNIs$f4V423IUo.k8E8q5wk6HsqE4x/sxsK1Azd.YnNogwyVJdE65gDX16./DKVNwrfPN0oa7uyRf9fhLk7UyPTjK.0"
     username: nextocean
+    password: "$6$oSqeZUJFYZG4xNIs$f4V423IUo.k8E8q5wk6HsqE4x/sxsK1Azd.YnNogwyVJdE65gDX16./DKVNwrfPN0oa7uyRf9fhLk7UyPTjK.0"
   ssh:
     install-server: true
     allow-pw: true
+  user-data:
+    disable_root: false
+    chpasswd:
+      expire: false
+    users:
+      - default
+      - name: nextocean
+        groups: sudo
+        shell: /bin/bash
   packages:
     - netcdf-bin
     - psensor
@@ -48,6 +57,19 @@ autoinstall:
     - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && sudo dpkg -i teamviewer-host_amd64.deb'
     - curtin in-target -- sh -c "gsettings set org.gnome.desktop.screensaver lock-enabled false"
     - curtin in-target -- sh -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled false"
+    - mkdir -p /target/home/nextocean/.config/autostart
+    - |
+      cat <<EOF > /target/home/nextocean/.config/autostart/psensor.desktop
+      [Desktop Entry]
+      Type=Application
+      Exec=/usr/bin/psensor
+      Hidden=false
+      NoDisplay=false
+      X-GNOME-Autostart-enabled=true
+      Name=psensor
+      Comment=psensor
+      EOF
+    - chown nextocean:nextocean /target/home/nextocean/.config/autostart/psensor.desktop
     - curtin in-target -- sh -c "gsettings set org.gnome.desktop.session idle-delay 0"
     - curtin in-target -- sh -c "gsettings set org.gnome.settings-daemon.plugins.power idle-dim false"
     - curtin in-target -- sh -c "gsettings set org.gnome.shell.extensions.ding show-home false"
