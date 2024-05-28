@@ -10,6 +10,6 @@ autoinstall:
     allow-pw: true
   late-commands:
     - curtin in-target -- apt update
-    - curtin in-target -- sh -c 'cd /home/nextocean/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb'
-    - curtin in-target -- sh -c 'cd /home/nextocean/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && sh Miniconda3-latest-Linux-x86_64.sh -b'
-    - curtin in-target -- sh -c 'cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && dpkg -i teamviewer-host_amd64.deb'
+    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb'
+    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && sudo sh Miniconda3-latest-Linux-x86_64.sh -b'
+    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && sudo dpkg -i teamviewer-host_amd64.deb'
