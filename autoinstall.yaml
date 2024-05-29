@@ -35,6 +35,7 @@ autoinstall:
     - wakeonlan
     - tigervnc-scraping-server
     - wireshark
+    - wget
     - qtbase5-dev 
     - qtchooser 
     - qt5-qmake 
@@ -53,10 +54,18 @@ autoinstall:
     - curtin in-target -- sh -c 'systemctl restart rsyslog.service'
     - curtin in-target -- sh -c "sed -i 's|#SystemMaxUse=|SystemMaxUse=10M|g' /etc/systemd/journald.conf"
     - curtin in-target -- sh -c "sed -i 's|#RuntimeMaxUse=|RuntimeMaxUse=10M|g' /etc/systemd/journald.conf"
-    - curtin in-target -- sh -c 'apt update && apt install -y wget'
-    - curtin in-target --target /target -- sh -c 'cd /home/nextocean/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb'
-    - curtin in-target --target /target -- sh -c 'cd /home/nextocean/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && sudo sh Miniconda3-latest-Linux-x86_64.sh -b'
-    - curtin in-target --target /target -- sh -c 'cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && sudo dpkg -i teamviewer-host_amd64.deb'
+    - curtin in-target -- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - curtin in-target -- dpkg -i google-chrome-stable_current_amd64.deb
+    - curtin in-target -- apt update
+    - curtin in-target -- apt install -f -y google-chrome-stable
+    - curtin in-target -- wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    - curtin in-target -- sh Miniconda3-latest-Linux-x86_64.sh -b
+    - curtin in-target -- wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - curtin in-target -- dpkg -i google-chrome-stable_current_amd64.deb
+    - curtin in-target -- apt install -f -y google-chrome-stable
+    - curtin in-target -- wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
+    - curtin in-target -- dpkg -i teamviewer_amd64.deb
+    - curtin in-target -- apt-get install -y teamviewer
     - curtin in-target -- sh -c "gsettings set org.gnome.desktop.screensaver lock-enabled false"
     - curtin in-target -- sh -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled false"
     - mkdir -p /target/home/nextocean/.config/autostart
