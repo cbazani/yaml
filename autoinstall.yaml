@@ -54,6 +54,8 @@ autoinstall:
     - curtin in-target -- sh -c "sed -i 's|#SystemMaxUse=|SystemMaxUse=10M|g' /etc/systemd/journald.conf"
     - curtin in-target -- sh -c "sed -i 's|#RuntimeMaxUse=|RuntimeMaxUse=10M|g' /etc/systemd/journald.conf"
     - curtin in-target -- sh -c 'apt update && apt install -y wget'
+    - curtin in-target -- sh -c 'chown -R nextocean:nextocean /home/nextocean'
+    - curtin in-target -- sh -c 'chmod -R 755 /home/nextocean' 
     - curtin in-target --target /target -- sh -c 'cd /home/nextocean/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb'
     - curtin in-target --target /target -- sh -c 'cd /home/nextocean/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && sudo sh Miniconda3-latest-Linux-x86_64.sh -b'
     - curtin in-target --target /target -- sh -c 'cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && sudo dpkg -i teamviewer-host_amd64.deb'
@@ -77,5 +79,3 @@ autoinstall:
     - curtin in-target -- sh -c "gsettings set org.gnome.shell.extensions.ding show-home false"
     - curtin in-target -- sh -c 'printf "[connectivity]\nuri=\ninterval=0\n" >> /etc/NetworkManager/NetworkManager.conf && systemctl restart NetworkManager'
     - curtin in-target -- sh -c 'apt update && apt upgrade -y && apt autoremove -y && apt autoclean && apt clean'
-    - curtin in-target -- sh -c 'chown -R nextocean:nextocean /home/nextocean'
-    - curtin in-target -- sh -c 'chmod -R 755 /home/nextocean' 
