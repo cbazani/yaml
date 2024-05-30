@@ -19,14 +19,14 @@ autoinstall:
         groups: sudo
         shell: /bin/bash
         sudo: ALL=(ALL) NOPASSWD:ALL
+  packages:
+    - ubuntu-desktop
+    - xdg-user-dirs
+    - wget
+    - dpkg
   late-commands:
-    - |
-      echo "nextocean ALL=(ALL) NOPASSWD:ALL" > /target/etc/sudoers.d/nextocean
-    - |
-      chroot /target /bin/bash -c "su - nextocean -c 'xdg-user-dirs-update'"
-    - |
-      chroot /target /bin/bash -c "su - nextocean -c 'cd ~/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb && sudo apt-get -f install -y'"
-    - |
-      chroot /target /bin/bash -c "su - nextocean -c 'cd ~/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb && sudo dpkg -i teamviewer_amd64.deb && sudo apt-get -f install -y'"
-    - |
-      chroot /target /bin/bash -c "su - nextocean -c 'cd ~/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3'"
+    - echo "nextocean ALL=(ALL) NOPASSWD:ALL" > /target/etc/sudoers.d/nextocean
+    - curtin in-target --target=/target -- /bin/bash -c "su - nextocean -c 'xdg-user-dirs-update'"
+    - curtin in-target --target=/target -- /bin/bash -c "cd /home/nextocean/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb && sudo apt-get -f install -y"
+    - curtin in-target --target=/target -- /bin/bash -c "cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb && sudo dpkg -i teamviewer_amd64.deb && sudo apt-get -f install -y"
+    - curtin in-target --target=/target -- /bin/bash -c "cd /home/nextocean/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && bash Miniconda3-latest-Linux-x86_64.sh -b -p /home/nextocean/miniconda3"
