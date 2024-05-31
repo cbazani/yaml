@@ -52,12 +52,12 @@ autoinstall:
     - curtin in-target --target /target -- sh -c "sed -i 's|#SystemMaxUse=|SystemMaxUse=10M|g' /etc/systemd/journald.conf"
     - curtin in-target --target /target -- sh -c "sed -i 's|#RuntimeMaxUse=|RuntimeMaxUse=10M|g' /etc/systemd/journald.conf"
     - curtin in-target --target /target -- sh -c 'apt update && apt install -y wget'
-    - curtin in-target --target /target -- sh -c 'sudo mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb'
-    - curtin in-target --target /target -- sh -c 'sudo mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && sudo sh Miniconda3-latest-Linux-x86_64.sh -b'
-    - curtin in-target --target /target -- sh -c 'sudo mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && sudo dpkg -i teamviewer-host_amd64.deb'
+    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb'
+    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && sudo sh Miniconda3-latest-Linux-x86_64.sh -b'
+    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && sudo dpkg -i teamviewer-host_amd64.deb'
     - curtin in-target --target /target -- sh -c "gsettings set org.gnome.desktop.screensaver lock-enabled false"
     - curtin in-target --target /target -- sh -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled false"
-    - sudo mkdir -p /target/home/nextocean/.config/autostart
+    - mkdir -p /target/home/nextocean/.config/autostart
     - |
       cat <<EOF > /target/home/nextocean/.config/autostart/psensor.desktop
       [Desktop Entry]
@@ -69,7 +69,7 @@ autoinstall:
       Name=psensor
       Comment=psensor
       EOF
-    - sudo chown nextocean:nextocean /target/home/nextocean/.config/autostart/psensor.desktop
+    - chown nextocean:nextocean /target/home/nextocean/.config/autostart/psensor.desktop
     - curtin in-target --target /target -- sh -c "gsettings set org.gnome.desktop.session idle-delay 0"
     - curtin in-target --target /target -- sh -c "gsettings set org.gnome.settings-daemon.plugins.power idle-dim false"
     - curtin in-target --target /target -- sh -c "gsettings set org.gnome.shell.extensions.ding show-home false"
