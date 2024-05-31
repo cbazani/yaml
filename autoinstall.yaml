@@ -18,59 +18,8 @@ autoinstall:
         groups: sudo
         shell: /bin/bash
   packages:
-    - netcdf-bin
-    - psensor
-    - default-jre
-    - libmbedtls-dev
-    - htop
-    - tmux
-    - emacs
-    - traceroute
-    - build-essential
-    - gnuplot
-    - ssh
-    - nmap
-    - arp-scan
-    - libminizip1
-    - wakeonlan
-    - tigervnc-scraping-server
-    - wireshark
-    - qtbase5-dev 
-    - qtchooser 
-    - qt5-qmake 
-    - qtbase5-dev-tools
-  debconf-selections: |
-    wireshark-common wireshark-common/install-setuid boolean false
+    - ubuntu-desktop
   late-commands:
-    - curtin in-target -- sh -c 'apt update && apt upgrade -y && apt autoremove -y && apt autoclean && apt clean'
-    - curtin in-target -- sh -c "sed -i 's/GRUB_TIMEOUT_STYLE=hidden/GRUB_TIMEOUT_STYLE=menu/g' /etc/default/grub"
-    - curtin in-target -- sh -c "sed -i 's/GRUB_TIMEOUT=[0-9]*/GRUB_TIMEOUT=5/g' /etc/default/grub"
-    - curtin in-target -- sh -c "sed -i 's/quiet splash//g' /etc/default/grub"
-    - curtin in-target -- sh -c 'update-grub'
-    - curtin in-target -- sh -c "sed -i 's|\*\.\*;auth,authpriv\.none\t\t-/var/log/syslog|$outchannel mysyslog,/var/log/syslog,10485760\n*.*;auth,authpriv.none\t\t:omfile:$mysyslog|g' /etc/rsyslog.d/50-default.conf"
-    - curtin in-target -- sh -c 'systemctl restart rsyslog.service'
-    - curtin in-target -- sh -c "sed -i 's|#SystemMaxUse=|SystemMaxUse=10M|g' /etc/systemd/journald.conf"
-    - curtin in-target -- sh -c "sed -i 's|#RuntimeMaxUse=|RuntimeMaxUse=10M|g' /etc/systemd/journald.conf"
-    - curtin in-target -- sh -c 'apt update && apt install -y wget'
-    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb'
-    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && sudo sh Miniconda3-latest-Linux-x86_64.sh -b'
-    - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && sudo dpkg -i teamviewer-host_amd64.deb'
-    - curtin in-target -- sh -c "gsettings set org.gnome.desktop.screensaver lock-enabled false"
-    - curtin in-target -- sh -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled false"
-    - mkdir -p /target/home/nextocean/.config/autostart
     - |
-      cat <<EOF > /target/home/nextocean/.config/autostart/psensor.desktop
-      [Desktop Entry]
-      Type=Application
-      Exec=/usr/bin/psensor
-      Hidden=false
-      NoDisplay=false
-      X-GNOME-Autostart-enabled=true
-      Name=psensor
-      Comment=psensor
-      EOF
-    - chown nextocean:nextocean /target/home/nextocean/.config/autostart/psensor.desktop
-    - curtin in-target -- sh -c "gsettings set org.gnome.desktop.session idle-delay 0"
-    - curtin in-target -- sh -c "gsettings set org.gnome.settings-daemon.plugins.power idle-dim false"
-    - curtin in-target -- sh -c "gsettings set org.gnome.shell.extensions.ding show-home false"
-    - curtin in-target -- sh -c 'printf "[connectivity]\nuri=\ninterval=0\n" >> /etc/NetworkManager/NetworkManager.conf && systemctl restart NetworkManager'
+      echo "Disabling show-home in GNOME Shell extension"
+      chroot /target /bin/bash -c 'gsettings set org.gnome.shell.extensions.ding show-home false'
