@@ -42,8 +42,6 @@ autoinstall:
   debconf-selections: |
     wireshark-common wireshark-common/install-setuid boolean false
   late-commands:
-    - curtin in-target --target /target -- sh -c 'sudo chown -R nextocean:nextocean /home/nextocean'
-    - curtin in-target --target /target -- sh -c 'sudo chmod -R 755 /home/nextocean'
     - curtin in-target --target /target -- sh -c 'apt update && apt upgrade -y && apt autoremove -y && apt autoclean && apt clean'
     - curtin in-target --target /target -- sh -c "sed -i 's/GRUB_TIMEOUT_STYLE=hidden/GRUB_TIMEOUT_STYLE=menu/g' /etc/default/grub"
     - curtin in-target --target /target -- sh -c "sed -i 's/GRUB_TIMEOUT=[0-9]*/GRUB_TIMEOUT=5/g' /etc/default/grub"
@@ -59,7 +57,13 @@ autoinstall:
     - curtin in-target --target /target -- sh -c 'mkdir -p /home/nextocean/Downloads && cd /home/nextocean/Downloads && wget https://download.teamviewer.com/download/linux/teamviewer-host_amd64.deb && sudo dpkg -i teamviewer-host_amd64.deb'
     - curtin in-target --target /target -- sh -c "gsettings set org.gnome.desktop.screensaver lock-enabled false"
     - curtin in-target --target /target -- sh -c "gsettings set org.gnome.desktop.screensaver idle-activation-enabled false"
+    - curtin in-target --target /target -- sh -c "gsettings set org.gnome.desktop.session idle-delay 0"
+    - curtin in-target --target /target -- sh -c "gsettings set org.gnome.settings-daemon.plugins.power idle-dim false"
+    - curtin in-target --target /target -- sh -c "gsettings set org.gnome.shell.extensions.ding show-home false"
+    - curtin in-target --target /target -- sh -c 'printf "[connectivity]\nuri=\ninterval=0\n" >> /etc/NetworkManager/NetworkManager.conf && systemctl restart NetworkManager'
     - mkdir -p /target/home/nextocean/.config/autostart
+    - curtin in-target --target /target -- sh -c 'sudo chown -R nextocean:nextocean /home/nextocean'
+    - curtin in-target --target /target -- sh -c 'sudo chmod -R 755 /home/nextocean'
     - |
       cat <<EOF > /target/home/nextocean/.config/autostart/psensor.desktop
       [Desktop Entry]
@@ -72,8 +76,3 @@ autoinstall:
       Comment=psensor
       EOF
     - chown nextocean:nextocean /target/home/nextocean/.config/autostart/psensor.desktop
-    - curtin in-target --target /target -- sh -c "gsettings set org.gnome.desktop.session idle-delay 0"
-    - curtin in-target --target /target -- sh -c "gsettings set org.gnome.settings-daemon.plugins.power idle-dim false"
-    - curtin in-target --target /target -- sh -c "gsettings set org.gnome.shell.extensions.ding show-home false"
-    - curtin in-target --target /target -- sh -c 'printf "[connectivity]\nuri=\ninterval=0\n" >> /etc/NetworkManager/NetworkManager.conf && systemctl restart NetworkManager'
-    # Add the following lines to ensure correct ownership and permissions
